@@ -109,12 +109,9 @@ namespace ConsoleApp2
         // Получить List путей по хешу имени файла
         public static List<string> getPathsByHash(byte hash)
         {
-            if (hashTable[hash].Count != 0)
-            {
-                return hashTable[hash];
-            }
-            else
+            if (hashTable[hash].Count == 0)
                 throw new EmptyResultListException();
+            return hashTable[hash];      
         }
 
         // Функция вывода хеш-таблицы (для проверки правильности работы программы)
