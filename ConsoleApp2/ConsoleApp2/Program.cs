@@ -64,6 +64,7 @@ namespace ConsoleApp2
                 List<string> pathList = getPathsByHash(hashOfFile);
                 foreach (string p in pathList)
                 {
+                    // Проверка на случай возникновения коллизии
                     if (Path.GetFileName(p).ToLower() == fileName.ToLower())
                         Console.WriteLine(p);
                 }
