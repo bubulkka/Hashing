@@ -7,14 +7,31 @@ using System.IO;
 
 namespace ConsoleApp2
 {
-    class EmptyResultListException : Exception {}
-
     class Program
     {
+        public static List<string>[] hashTable = new List<string>[256];
         static void Main(string[] args)
         {
             Console.WriteLine("Введите название папки: ");
-            string path = Console.ReadLine();
+
+            string path = Console.ReadLine(); ;
+
+            try
+            {
+                fillHashTable(path);
+            }
+            catch(DirectoryNotFoundException ex)
+            {
+                Console.WriteLine("Указано имя несуществующей папки!");
+                Console.ReadLine();
+                return;
+            }
+            catch(UnauthorizedAccessException exception)
+            {
+                Console.WriteLine("Указано имя недоступной папки!");
+                Console.ReadLine();
+                return;
+            }
 
             Console.WriteLine("R - Продолжить" + "\t" + "Q - Выход");
             string str = Console.ReadLine();
@@ -25,8 +42,6 @@ namespace ConsoleApp2
                 {
                     hashTable[i] = new List<string>();
                 }
-
-                fillHashTable(path);
 
                 for (int i = 0; i < hashTable.Length; i++)
                 {
@@ -41,21 +56,27 @@ namespace ConsoleApp2
 
                 byte hashOfFile = getHashCode(fileName.ToLower());
 
-                int count = hashTable[hashOfFile].Count;
-
-                for (int i = 0; i < count; i++)
+                try
                 {
-                    if (Path.GetFileName(hashTable[hashOfFile][i]).ToLower() == fileName)
-                        Console.WriteLine(hashTable[getHashCode(fileName)][i]);
+                    List<string> pathList = getPathsByHash(hashOfFile);
+                    foreach (string p in pathList)
+                    {
+                        if (Path.GetFileName(p).ToLower() == fileName)
+                            Console.WriteLine(p);
+                    }
+                }
+                catch (EmptyResultListException e)
+                {
+                    Console.WriteLine("Файл не найден!");
                 }
             }
             else
-                Environment.Exit(0);
+                return;
             Console.ReadLine();
         }
 
-        public static List<string>[] hashTable = new List<string>[256];
-        
+        class EmptyResultListException : Exception { }
+
         public static void fillHashTable(string path)
         {
             string[] dirs = Directory.GetDirectories(path);
@@ -80,7 +101,7 @@ namespace ConsoleApp2
             return ((byte)(sum % 256));
         }
 
-        public static List<string> getPathsByHash(List<string>[] hashTable, byte hash)
+        public static List<string> getPathsByHash(byte hash)
         {
             if (hashTable[hash].Count != 0)
             {
