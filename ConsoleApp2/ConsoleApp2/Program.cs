@@ -7,6 +7,8 @@ using System.IO;
 
 namespace ConsoleApp2
 {
+    class EmptyResultListException : Exception {}
+
     class Program
     {
         static void Main(string[] args)
@@ -76,6 +78,16 @@ namespace ConsoleApp2
             for (int i = 0; i < fileName.Length; i++)
                 sum += fileName[i];
             return ((byte)(sum % 256));
+        }
+
+        public static List<string> getPathsByHash(List<string>[] hashTable, byte hash)
+        {
+            if (hashTable[hash].Count != 0)
+            {
+                return hashTable[hash];
+            }
+            else
+                throw new EmptyResultListException();
         }
     }
 }
