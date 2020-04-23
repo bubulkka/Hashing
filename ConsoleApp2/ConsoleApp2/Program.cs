@@ -27,7 +27,7 @@ namespace ConsoleApp2
             {
                 fillHashTable(path); 
             }
-            // Если введено неверное имя папки или её не существует
+            // Если введен путь к несуществующей папке
             catch(DirectoryNotFoundException ex)
             {
                 Console.WriteLine("Указано имя несуществующей папки!");
@@ -42,26 +42,26 @@ namespace ConsoleApp2
                 return;
             }
 
-            Console.WriteLine("R - Поиск файла по имени" + "\t" + "Q - Выход");
+            Console.WriteLine("R - Поиск файла по имени \t Q - Выход");
             string str = Console.ReadLine();
 
             if (str == "Q") return;
 
             Console.WriteLine("Введите имя файла для поиска");
 
-            // Ввод имени файла, путь к которому мы хотим получить
+            // Ввод имени файлов, пути к которым мы хотим получить 
             string fileName = Console.ReadLine();
 
             // Хеш-код введеного имени файла
             byte hashOfFile = getHashCode(fileName.ToLower());
 
-            // Если не найдено файлов с таким хешом (т.е в хеш-таблице с индексом хеш-кода 
-            // имени файла, который мы ввели, находится пустой лист)
+            /* Если не найдено файлов с таким хешом (т.е в хеш-таблице по индексу hashOfFile 
+             * находится пустой List) */
             try
             {
                 List<string> pathList = getPathsByHash(hashOfFile);
-            foreach (string p in pathList)
-            {
+                foreach (string p in pathList)
+                {
                     if (Path.GetFileName(p).ToLower() == fileName.ToLower())
                         Console.WriteLine(p);
                 }
