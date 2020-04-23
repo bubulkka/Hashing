@@ -54,11 +54,7 @@ namespace ConsoleApp2
 
             // Хеш-код введеного имени файла
             byte hashOfFile = getHashCode(fileName.ToLower());
-
-            /* 
-             * Если не найдено файлов с таким хешом (т.е в хеш-таблице по индексу hashOfFile 
-             * находится пустой List) 
-             */
+           
             try
             {
                 List<string> pathList = getPathsByHash(hashOfFile);
@@ -69,6 +65,10 @@ namespace ConsoleApp2
                         Console.WriteLine(p);
                 }
             }
+            /* 
+             * Если не найдено файлов с таким хешом (т.е в хеш-таблице по индексу hashOfFile 
+             * находится пустой List) 
+             */
             catch (EmptyResultListException ex)
             {
                 Console.WriteLine("Файл не найден!");
